@@ -1,5 +1,7 @@
 package com.d9nich.exercise4;
 
+import java.util.Arrays;
+
 public class ImprovedQuickSort {
     public static void quickSort(int[] list) {
         quickSort(list, 0, list.length - 1);
@@ -17,8 +19,9 @@ public class ImprovedQuickSort {
      * Partition the array list[first..last]
      */
     public static int partition(int[] list, int first, int last) {
-        int pivot = list[first]; // Choose the first element as the pivot
-        int low = first + 1; // Index for forward search
+        int pivotIndex = pivotIndex(list, first, last);
+        int pivot = list[pivotIndex]; // Choose the first element as the pivot
+        int low = first; // Index for forward search
         int high = last; // Index for backward search
 
         while (high > low) {
@@ -38,17 +41,30 @@ public class ImprovedQuickSort {
             }
         }
 
-        while (high > first && list[high] >= pivot)
+        while (high > pivotIndex && list[high] >= pivot)
             high--;
 
         // Swap pivot with list[high]
         if (pivot > list[high]) {
-            list[first] = list[high];
+            list[pivotIndex] = list[high];
             list[high] = pivot;
             return high;
         } else {
-            return first;
+            return pivotIndex;
         }
+    }
+
+    private static int pivotIndex(int[] list, int first, int last) {
+        int firstNumber = list[first];
+        int lastNumber = list[last];
+        int middle = (first + last) / 2;
+        int[] numbersSorted = {firstNumber, lastNumber, list[middle]};
+        Arrays.sort(numbersSorted);
+        if (firstNumber == numbersSorted[1])
+            return first;
+        if (lastNumber == numbersSorted[1])
+            return last;
+        return middle;
     }
 
     /**
